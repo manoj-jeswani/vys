@@ -1,0 +1,35 @@
+ <section id="home">
+
+   	<div class="overlay"></div>
+
+   	<div class="home-content-table">
+   	
+		   <div class="home-content-tablecell">
+		   	<div class="row">
+		   		<div class="col-twelve">		   			
+			  		
+			  				<h1 class="animate-intro"> </h1>
+				  			<br>>
+				  			<br>
+				  			<h3 class="animate-intro">
+							 <br>
+							
+				  			</h3>	
+
+			   <br>
+			   <br>
+
+  
+ 
+
+			  		</div> 
+             </div>
+       
+       
+
+		   </div> <!-- end home-content-tablecell --> 		   
+		</div> <!-- end home-content-table -->
+
+
+	
+   </section> <!-- end home -->
