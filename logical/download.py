@@ -32,7 +32,8 @@ def dload(v_id,d_audio):
                 'preferredquality': '320K',
             }],
             'logger': MyLogger(),
-            'progress_hooks': [my_hook],
+            'progress_hooks': [my_hook], 
+            # 'outtmpl': 'static/{s}.mp3'.format(s=v_id) 
         }
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
