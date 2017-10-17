@@ -1,4 +1,4 @@
-import os
+# import os
 # from datetime import datetime
 # from threading import Timer
 
@@ -12,6 +12,19 @@ import os
 # secs=delta_t.seconds+1
 
 
+# def clean_fun():
+
+# 	os.system("cd ~/vys/static/logical && rm -r d_audios")
+# 	os.system("cd ~/vys/static/logical && mkdir d_audios")
+# 	os.system("cd ~/vys/static/logical && rm -r d_videos")
+# 	os.system("cd ~/vys/static/logical && mkdir d_videos")
+
+# t = Timer(secs, clean_fun)
+# t.start()
+
+import schedule
+import time
+
 def clean_fun():
 
 	os.system("cd ~/vys/static/logical && rm -r d_audios")
@@ -19,7 +32,9 @@ def clean_fun():
 	os.system("cd ~/vys/static/logical && rm -r d_videos")
 	os.system("cd ~/vys/static/logical && mkdir d_videos")
 
-# t = Timer(secs, clean_fun)
-# t.start()
+schedule.every().day.at("17:30").do(clean_fun,'It is 17:30')
 
-clean_fun()
+while True:
+    schedule.run_pending()
+    time.sleep(60) # wait one minute
+    
