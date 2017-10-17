@@ -70,6 +70,7 @@
 
 import requests
 import json 
+from urllib.error import HTTPError
 
 d_key = "AIzaSyBT_zMEst2Sz8bSFLU63OudONQUb77SnF0"
 
@@ -106,7 +107,7 @@ def search_keyword(keyword):
     ls=get_y_content(content)
     return ls
 
-  except HttpError as e:
+  except HTTPError as e:
     print ("An HTTP error %d occurred:\n %s" % (e.resp.status, e.content))
 
 

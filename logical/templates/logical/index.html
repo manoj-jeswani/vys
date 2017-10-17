@@ -5,6 +5,74 @@
 
 
 
+
+{% if particular %}
+
+  <section id="home" style="background-image: url({% static 'logical/images/bg12.jpg' %});">
+   	<div class="overlay"></div>
+
+   	<div class="home-content-table">
+   	
+		   <div class="home-content-tablecell">
+		   	<div class="row">
+		   		<div class="col-twelve">		   			
+			  		
+			  				<h1 class="animate-intro">Coool !! </h1>
+				  			<br>
+				  			<br>
+				  			<h3 class="animate-intro">
+							 <span>Just one more tap..</span> <br> Play it or download it..</p>	
+
+				  			</h3>	
+				  			 <br>
+			   <br>
+
+{% if daudio %}
+		<audio controls="" style="cursor:pointer;">
+<source src="{% static aname %}" type="audio/mp4"> <!--mp4a -->
+<source src="{% static aname %}" type="audio/mpeg"> <!--mp3-->
+<source src="{% static aname %}" type="audio/ogg">
+  Your browser does not support the audio tag.
+</audio>  
+ 
+ <br>
+<br>
+{% endif %}
+ 
+
+{% ifequal daudio 0 %}
+
+ 			  		  <video style="cursor:pointer;" controls="" height="360" width="540">
+<source src="{% static vname %}" type="video/mp4">
+<source src="{% static vname %}" type="video/webm">
+
+     Your browser does not support the video tag.
+</video>
+<br>
+<br>
+<hr>
+			  	
+{% endifequal %}
+
+
+			  		</div> 
+             </div>
+       
+       
+
+		   </div> <!-- end home-content-tablecell --> 		   
+		</div> <!-- end home-content-table -->
+
+
+	
+   </section> <!-- end home -->
+
+
+{% endif %}
+
+
+
+
   {% if res %}
 
    <!-- about
@@ -36,7 +104,7 @@
     <li class="list-group-item">x Views, y likes</li>
     
   </ul> -->
-     <a href="https://www.youtube.com/watch?v={{obj.v_id}}" class="card-link">Watch Online</a>
+     <a href="https://www.youtube.com/watch?v={{obj.v_id}}" class="card-link">Watch On Youtube</a>
 
   <div class="card-block">
    
@@ -76,15 +144,7 @@
 
    <!-- about
    ================================================== -->
-{% endif %}
-
-
-
-
-
-
-
-
+{% else %}
 
 
 
@@ -174,7 +234,8 @@
 
 
 
-  <section id="home" style="background-image: url({% static 'logical/images/bg3.jpg' %});">
+
+  <section id="home" class="aboutsection" style="background-image: url({% static 'logical/images/bg3.jpg' %});">
    	<div class="overlay"></div>
 
    	<div class="home-content-table">
@@ -182,20 +243,26 @@
 		   <div class="home-content-tablecell">
 		   	<div class="row">
 		   		<div class="col-twelve">		   			
-			  		
-			  				<h1 class="animate-intro">About Us </h1>
+			
+			<h1 class="animate-intro">About Us </h1>
 				  			<br>
 				  			<br>
 				  			<h3 class="animate-intro">
-							 <span>gomp3 --Promising fast downloading experience--</span> <br>is an entertainment hub that provides you free and fast downloading service, it lets you download any mp3 or video song in best available quality by providing direct links.  </p>	
+							 <span>gomp3</span><hr>
+							  --Promising fast downloading experience--
+							   <br><p>gomp3 is an entertainment hub that provides you free and fast downloading service, it lets you download any mp3 or video song in best available quality by providing direct links.  </p>	
 
 				  			</h3>	
 
 			   <br>
 			   <br>
 
+
+
+
+
   
- 
+
 
 			  		</div> 
              </div>
@@ -227,9 +294,9 @@
 
 		<div class="row narrow section-intro with-bottom-sep animate-this">
    		<div class="col-twelve">
-   			<h3>Contact</h3>
-   			<h1>Get In Touch.</h1>
-
+   			
+   			<h1>Contact Us</h1>
+				<h3>Your feedback is appreciated..</h3>
    			<p class="lead"></p>
    		</div> 
    	</div> <!-- end section-intro -->
@@ -323,6 +390,8 @@
          </div> 
    	</div> 
 	</section> 
+{% endif %}
+
 {% endblock %}
 
 {% block include_scripts %}
