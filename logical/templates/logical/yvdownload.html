@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+{% if particular %}
+
+  <section id="about" style="background-image: url({% static 'logical/images/bg12.jpg' %});">
+   	<div class="overlay"></div>
+
+   	<div class="home-content-table">
+   	
+		   <div class="home-content-tablecell">
+		   	<div class="row">
+		   		<div class="col-twelve">		   			
+			  		
+			  				<h1 class="animate-intro">Coool !! </h1>
+				  			<br>
+				  			
+				  			<br>
+				<br>
+				  			<h2 class="animate-intro" style="color:white;" >
+				  				<p>
+							 Just one more tap :: <br> Play it or download it..
+</p>
+				  			</h2>	
+				<br>
+				<br>
+				
+				
+ 
+
+
+ 			  		  <video style="cursor:pointer;" controls="" height="360" width="540">
+<source src="{% static vname %}" type="video/mp4">
+<source src="{% static vname %}" type="video/webm">
+
+     Your browser does not support the video tag.
+</video>
+
+			  	
+
+
+			  		</div> 
+             </div>
+       
+       
+
+		   </div> <!-- end home-content-tablecell --> 		   
+		</div> <!-- end home-content-table -->
+
+
+	
+   </section> <!-- end home -->
+
+
+{% endif %}
+
+
+
+
+
+  <section id="home">
+
+   	<div class="overlay"></div>
+
+   	<div class="home-content-table">
+   	
+		   <div class="home-content-tablecell">
+		   	<div class="row">
+		   		<div class="col-twelve">		   			
+			  		
+			  				<h1 class="animate-intro">opiMiner::gomp4</h1>
+				  			<br>
+				  			<br>
+				  			<h3 class="animate-intro">
+							Download any Youtube video<br> in
+							hd quality..
+				  			</h3>	
+
+			   <form method='POST' action='./yvd'>{% csrf_token %}
+
+<!-- 
+    <div class="input-group " > -->
+
+<div class='row'>
+	<div class='col-twelve'>
+<input type="text" class="form-control" name="link" required="" id="id_link" minlength="3" maxlength="150" placeholder="Paste video url..." style="  display: block;  margin: 0;  box-shadow: 0 0 1px 1px #969696;   font-family: sans-serif; font-color:white;   appearance: none;    color:red;  border: solid  #969696; height: 100% ">
+
+   	       </div>
+
+<div class='col-twelve'>
+
+      <input class="btn btn-secondary" style="display: block;  margin: 0 auto; cursor:pointer ; background-color: rgba(0,0,0,0.1); color:white;  box-shadow: 0 0 5px 2px #969696; height: 100%"  name="submit" type="submit" value="Download">
+</div>
+    </div>
+<!-- </div>
+ -->    </form>
+
+  
+ 
+
+			  		</div> 
+             </div>
+       
+       
+
+ 
+		   </div> <!-- end home-content-tablecell --> 		   
+		</div> <!-- end home-content-table -->
+
+
+   </section> <!-- end home -->
+
+
+
+
+{% endblock %}
+
+{% block include_scripts %}
+
+
+{% endblock %}

@@ -1,4 +1,4 @@
-{% load static %}
+	{% load static %}
 
 <!DOCTYPE html>
 <!--[if IE 8 ]><html class="no-js oldie ie8" lang="en"> <![endif]-->
@@ -20,7 +20,7 @@
    <!--- basic page needs
    ================================================== -->
    <meta charset="utf-8">
-	<title>gomp3</title>
+	<title>opiMiner</title>
 	<meta name="description" content="">  
 	<meta name="author" content="">
 
@@ -67,13 +67,18 @@
 
 			<a href="#0" class="close-button" title="close"><span>Close</span></a>	
 
-	   	<h3>gomp3</h3>  
+	   	<h3>opiMiner</h3>  
 
 			<ul class="nav-list">
-				<li class="current"><a class="smoothscroll" href="/#home" title="">Home</a></li>
-				<!-- <li><a class="smoothscroll" href="#" title="">About</a></li> -->
+				<li class="current"><a  href="/" title="">Home</a></li>
+				<li class="current"><a  href="{% url 'index_g' %}" title="">Download song(mp3/video)</a></li>
+				<li class="current"><a  href="{% url 'yvd' %}" title="">Download Youtube Video</a></li>
+
+				<li class="current"><a  href="{% url 'cnv' %}" title="">Convert Youtube or any mp4 video to mp3</a></li>
+				
+		<!-- <li><a class="smoothscroll" href="#" title="">About</a></li> -->
 				<!-- <li><a class="smoothscroll" href="#services" title="">Services</a></li> -->
-				<li><a class="smoothscroll" href="/#contact" title="">Contact</a></li>						
+				<li class="current"><a  href="#contact" title="">Contact</a></li>						
 			</ul>	
 
 			<ul class="header-social-list">
@@ -101,8 +106,36 @@
 {% block content %}
 
 {% endblock %}
-	<!-- footer
-   ================================================== -->
+	
+	  <section id="contact" style="background-image: url({% static 'logical/images/bg3.jpg' %});">
+
+      <div class="overlay"></div>
+
+		<div class="row narrow section-intro with-bottom-sep animate-this">
+   		<div class="col-twelve">
+   			
+   			<h1>Contact Us</h1>
+				<h3>Your feedback is appreciated..</h3>
+   			<p class="lead"></p>
+   		</div> 
+   	</div> <!-- end section-intro -->
+
+   	<div class="row contact-content">
+
+   		<div class="col-seven tab-full animate-this">
+
+
+	   			<h6>Email Us At</h6>
+	   			<p>
+	   				manojjeswanig@gmail.com<br>
+				   				     
+				   </p>
+
+
+         </div> 
+   	</div> 
+	</section> 
+
 	<footer>
      	<div class="footer-main">
 
@@ -110,7 +143,7 @@
 
 	      	<div class="col-five tab-full footer-about">       
 
-	            <h4 class="h05">gomp3</h4>
+	            <h4 class="h05">opiMiner</h4>
 
 		      </div> <!-- end footer-about -->
 
@@ -142,7 +175,7 @@
 
       		<div class="col-twelve">
 	      		<div class="copyright">
-		         	<span>© Copyright gomp3 2017.</span> 
+		         	<span>© Copyright opiMiner 2017.</span> 
 		         	<span>Developed by <a href="https://www.linkedin.com/in/manoj-jeswani-28b6b413a/">Manoj</a></span>		         	
 		         </div>		               
 	      	</div>

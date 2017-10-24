@@ -4,11 +4,18 @@ from .search import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse,HttpResponseRedirect
 from .download import *
+from urllib.parse import urlparse, parse_qs
+
+def index_view(request):
+	context={}
+	return render(request, 'logical/index.html',context)
+
+
 
 
 
 # Create your views here.
-def index_get_query(request):
+def mp3_get_query(request):
 	kw=""
 	error_msg=""
 	res_list=[]
@@ -31,7 +38,7 @@ def index_get_query(request):
 			request.session['results']=res_list
 			request.session['tempd']=tempd
 			
-			return HttpResponseRedirect('search-results/all/8')
+			return HttpResponseRedirect('omp3/search-results/all/8')
 
 			# for i in res_list:
 			# 	print(i)
@@ -45,7 +52,7 @@ def index_get_query(request):
 		"res":res,
 		}
 
-	return render(request, 'logical/index.html',context)
+	return render(request, 'logical/sdownload.html',context)
 
 
 def uconvert(title):
@@ -59,7 +66,7 @@ def uconvert(title):
 
 
 	
-def index_show_results(request,v_id=None,d_audio=None):
+def mp3_show_results(request,v_id=None,d_audio=None):
 	f=search_submit_form()
 	aname=""
 	vname=""
@@ -108,5 +115,64 @@ def index_show_results(request,v_id=None,d_audio=None):
 	"daudio":int(d_audio)
 	}
 
-	return render(request, 'logical/index.html',context)
+	return render(request, 'logical/sdownload.html',context)
+
+
+
+def get_id(url):
+    u_pars = urlparse(url)
+    quer_v = parse_qs(u_pars.query).get('v')
+    if quer_v:
+        return quer_v[0]
+    pth = u_pars.path.split('/')
+    if pth:
+        return pth[-1]
+
+
+
+
+def yv_view(request):
+	lnk=""
+	particular=0
+	error_msg=""
+	vname=""
+	if request.method=='POST':
+
+		f=utube_submit(request.POST)
+		if f.is_valid():
+			lnk=f.cleaned_data.get('link')
+		if lnk=="":
+			error_msg=f.errors.get('link')
+			f.errors['link']=""
+		else:
+			vid=get_id(lnk)
+			if vid is not None:
+				mm=""
+				mapy={}
+
+				mm=dload(str(vid),0,mapy)
+				particular=1
+
+				vname='logical/d_videos/{s}.mp4'.format(s=mm)
+
+
+
+	else:
+		f=utube_submit()
+	context={
+		"form":f,
+		"error_msg":error_msg,
+		"particular":particular,
+		"vname":vname,
+		}
+
+
+	return render(request, 'logical/yvdownload.html',context)
+
+
+
+
+def cn_view(request):
+	context={}
+	return render(request, 'logical/convertmp43.html',context)
 
