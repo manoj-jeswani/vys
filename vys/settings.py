@@ -124,3 +124,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT =os.path.join(BASE_DIR, 'media/')
+SHORTCODE_MAX=15
+SHORTCODE_MIN=6

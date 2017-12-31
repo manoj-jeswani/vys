@@ -12,9 +12,6 @@
    	<div class="home-content-table">
    	
 		   <div class="home-content-tablecell">
-		   	<div class="row">
-		   		<div class="col-twelve">		   			
-			  		
 			  				<h1 class="animate-intro">opiMiner::converter</h1>
 				  			<br>
 				  			<br>
@@ -23,21 +20,54 @@
 							without affecting the quality
 				  			</h3>	
 
-			   <br>
-<br>
-			   <br>
-			   <br>
-		   			   
-  <h3 class="animate-intro">
-							Coming Soon....<br>
-							
-				  			</h3>	
- 
 
-			  		</div> 
-             </div>
        
        
+
+<!-- 
+<div class='row'>
+	<div class='col-twelve'>
+<input type="text" class="form-control" name="link" required="" id="id_link" minlength="3" maxlength="150" placeholder="Paste video url..." style="  display: block;  margin: 0;  box-shadow: 0 0 1px 1px #969696;   font-family: sans-serif; font-color:white;   appearance: none;    color:red;  border: solid  #969696; height: 100% ">
+
+   	       </div>
+
+<div class='col-twelve'>
+
+      <input class="btn btn-secondary" style="display: block;  margin: 0 auto; cursor:pointer ; background-color: rgba(0,0,0,0.1); color:white;  box-shadow: 0 0 5px 2px #969696; height: 100%"  name="submit" type="submit" value="Download">
+</div>
+    </div>
+ -->
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class='row'>
+	<div class='col-lg-4 col-sm-0 col-md-4'>
+    </div>
+	<div class='col-lg-4 col-sm-12 col-md-4'>
+
+    <input type="file" name="up" required="" id="id_up" style="  display: block;  margin: 0;cursor:pointer ;  box-shadow: 0 0 5px 5px #969696;   font-family: sans-serif; font-color:white;   appearance: none;    color:yellow;  border: solid  #969696;  ">
+</div>
+
+
+<div class='col-lg-4 col-sm-0 col-md-4'>
+    </div>
+
+
+<div class='col-lg-12 col-sm-0 col-md-12' >
+    
+    <input class="btn btn-secondary" style="display: block;  margin: 0 auto; cursor:pointer ; background-color: rgba(0,0,0,0.1); color:white;   box-shadow: 0 0 2px 5px #969696;  margin-top: 3%; "  name="submit" type="submit" value="Convert">
+</div>
+
+</div>
+
+  </form>
+
+<!-- <input type="button" value="click me" onclick="doing_fun()">
+
+<p id="doing"></p>
+
+ -->
+ 
 
  
 		   </div> <!-- end home-content-tablecell --> 		   
@@ -53,5 +83,12 @@
 
 {% block include_scripts %}
 
+<!-- <script type="text/javascript">
+	function doing_fun()
+	{
 
+		document.getElementById("doing").innerHTML = "Uploading and Converting..";
+	}
+</script>
+ -->
 {% endblock %}

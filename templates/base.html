@@ -72,10 +72,13 @@
 			<ul class="nav-list">
 				<li class="current"><a  href="/" title="">Home</a></li>
 				<li class="current"><a  href="{% url 'index_g' %}" title="">Download song(mp3/video)</a></li>
-				<li class="current"><a  href="{% url 'yvd' %}" title="">Download Youtube Video</a></li>
+				<li class="current"><a  href="{% url 'yvd' 0 %}" title="">Download Youtube Video</a></li>
 
-				<li class="current"><a  href="{% url 'cnv' %}" title="">Convert Youtube or any mp4 video to mp3</a></li>
+				<li class="current"><a  href="{% url 'cnv' %}" title="">Convert mp4 to mp3</a></li>
 				
+
+				<li class="current"><a  href="{% url 'yvd' 1 %}" title="">Convert Youtube video to mp3</a></li>
+
 		<!-- <li><a class="smoothscroll" href="#" title="">About</a></li> -->
 				<!-- <li><a class="smoothscroll" href="#services" title="">Services</a></li> -->
 				<li class="current"><a  href="#contact" title="">Contact</a></li>						
@@ -83,13 +86,16 @@
 
 			<ul class="header-social-list">
 	         <li>
-	         	<a href="#"><i class="fa fa-facebook-square"></i></a>
+	         	<a href="https://www.linkedin.com/in/manoj-jeswani-28b6b413a/"><i class="fa fa-linkedin"></i></a>
 	         </li>
 	         <li>
-	         	<a href="#"><i class="fa fa-twitter"></i></a>
+	         	<a href="https://www.facebook.com/manoj.jesin"><i class="fa fa-facebook-square"></i></a>
 	         </li>
 	         <li>
-	         	<a href="#"><i class="fa fa-instagram"></i></a>
+	         	<a href="https://twitter.com/manojjeswanig"><i class="fa fa-twitter"></i></a>
+	         </li>
+	         <li>
+	         	<a href="https://www.instagram.com/nocturnal.294/"><i class="fa fa-instagram"></i></a>
 	         </li>
           <!--   <li>
             	<a href="#"><i class="fa fa-behance"></i></a>
@@ -103,6 +109,9 @@
 
 	</header> <!-- end header -->  
 
+
+
+<marquee style='color:yellow'>Please allow cookies in your browser to enjoy the services..</marquee>			
 {% block content %}
 
 {% endblock %}
@@ -141,25 +150,51 @@
 
    		<div class="row">  
 
-	      	<div class="col-five tab-full footer-about">       
-
-	            <h4 class="h05">opiMiner</h4>
-
-		      </div> <!-- end footer-about -->
 
 	      	<div class="col-three tab-full footer-social">
 
-	      		<h4 class="h05">Follow Us.</h4>
+	      		<h4 class="h05">Follow Us</h4>
 
 	      		<ul class="list-links">
-	      			<li><a href="#">Facebook</a></li>
-						<li><a href="#">Twitter</a></li>
-						<li><a href="#">Instagram</a></li>
-			
-					</ul>
+
+	      			   <li>
+	         	<a href="https://www.linkedin.com/in/manoj-jeswani-28b6b413a/"><i class="fa fa-linkedin"></i> Linkedin</a>
+	         </li>
+	         <li>
+	         	<a href="https://www.facebook.com/manoj.jesin"><i class="fa fa-facebook-square"></i> Facebook</a>
+	         </li>
+	         <li>
+	         	<a href="https://twitter.com/manojjeswanig"><i class="fa fa-twitter"></i> Twitter</a>
+	         </li>
+	         <li>
+	         	<a href="https://www.instagram.com/nocturnal.294/"><i class="fa fa-instagram"></i>   Instagram</a>
+	         </li>
+
+	      			</ul>
 
 	      	</div> <!-- end footer-social -->  
 
+	    
+	      	<div class="col-five tab-full footer-about">       
+
+	            <!-- <b><p class="" style="color:green; text-align: center">opiMiner</p></b>
+	             -->
+	            <i class="fa fa-music fa-stack-2x" aria-hidden="true"></i>
+	            <br>
+	            <br>
+	            
+				<i class="fa fa-download fa-stack-2x" aria-hidden="true"></i>
+				<br>
+	            <br>
+	            
+				<i class="fa fa-file-audio-o fa-stack-2x" aria-hidden="true"></i>
+	            <br>
+	            <br>
+	            
+	            <i class="fa fa-exchange fa-stack-2x" aria-hidden="true"></i>
+	            
+
+		      </div> <!-- end footer-about -->
 	      	<div class="col-four tab-full footer-subscribe end">
 
 	      	           	

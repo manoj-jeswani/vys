@@ -5,6 +5,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse,HttpResponseRedirect
 from .download import *
 from urllib.parse import urlparse, parse_qs
+import moviepy.editor as mp
+import re
+from .utils import code_generator,create_shortcode
+import os
+from django.conf import settings
+PATH=settings.STATIC_ROOT
+		
+
 
 def index_view(request):
 	context={}
@@ -100,8 +108,21 @@ def mp3_show_results(request,v_id=None,d_audio=None):
 			dload(str(v_id),int(d_audio),tempd)
 			particular=1
 
-			aname='logical/d_audios/{s}.mp3'.format(s=uconvert(tempd[v_id]))
-			vname='logical/d_videos/{s}.mp4'.format(s=uconvert(tempd[v_id]))
+			mm=uconvert(tempd[v_id])
+			
+			if int(d_audio):
+			
+				cmd="cd {path}/logical/d_audios; ls {file}.*".format(path=PATH,file=mm)	
+				mm=os.popen(cmd).read()[:-1]
+				aname='logical/d_audios/{s}'.format(s=mm)
+			else:
+				cmd="cd {path}/logical/d_videos; ls {file}.*".format(path=PATH,file=mm)
+				mm=os.popen(cmd).read()[:-1]
+				vname='logical/d_videos/{s}'.format(s=mm)
+			
+
+
+
 
 
 	context={
@@ -131,11 +152,12 @@ def get_id(url):
 
 
 
-def yv_view(request):
+def yv_view(request,a=None):
 	lnk=""
 	particular=0
 	error_msg=""
 	vname=""
+	aname=""
 	if request.method=='POST':
 
 		f=utube_submit(request.POST)
@@ -150,10 +172,17 @@ def yv_view(request):
 				mm=""
 				mapy={}
 
-				mm=dload(str(vid),0,mapy)
+				mm=dload(str(vid),int(a),mapy)
 				particular=1
-
-				vname='logical/d_videos/{s}.mp4'.format(s=mm)
+				if int(a):
+					cmd="cd {path}logical/d_audios; ls {file}.*".format(path=PATH,file=mm)	
+					mm=os.popen(cmd).read()[:-1]
+					aname='logical/d_audios/{s}'.format(s=mm)
+				else:
+					cmd="cd {path}logical/d_videos; ls {file}.*".format(path=PATH,file=mm)
+					mm=os.popen(cmd).read()[:-1]
+					vname='logical/d_videos/{s}'.format(s=mm)
+				
 
 
 
@@ -164,15 +193,70 @@ def yv_view(request):
 		"error_msg":error_msg,
 		"particular":particular,
 		"vname":vname,
+		"aname":aname,
+		"ia":int(a)
 		}
 
 
 	return render(request, 'logical/yvdownload.html',context)
 
 
+def repspace(fname):
+	
+	fname=fname.replace(" ","_")
+	return str(fname)
+
+def get_extension(name):
+	return re.findall(r'.\w+$',name)[0][:]
+
+
 
 
 def cn_view(request):
-	context={}
+
+	if request.method == 'POST':
+		got_up=''
+		
+		if 'up' in request.FILES:
+			got_up=request.FILES['up'].name
+		
+		ext=get_extension(str(got_up)) 
+		code=create_shortcode()            
+
+		request.FILES['up'].name=str(code+ext)
+
+		form = Uploadmp4Form(request.POST, request.FILES)
+
+		if form.is_valid():
+			form=form.save(commit=False)
+			form.code=code
+			form.save()
+
+			fname=repspace(str(got_up))
+			clip = mp.VideoFileClip("media/videouploads/"+str(code+ext))
+			lname=fname.replace(ext,str(code+'.mp3'))
+			fname="static/logical/d_audios/"+lname
+			clip.audio.write_audiofile(fname)
+			cmd='cd media/videouploads; rm {s}'.format(s=str(code+ext))
+			os.system(cmd)
+			instance=Uploadmp4.objects.filter(code=code)
+			instance.delete()
+			aname='logical/d_audios/'+lname
+			context={
+				"res":0,
+				"particular":1,
+				"aname":aname,
+				"vname":'',
+				"daudio":int(1)
+				}
+
+			return render(request, 'logical/sdownload.html',context)
+	
+	else:
+		form = Uploadmp4Form()
+
+
+	context={'form': form}
 	return render(request, 'logical/convertmp43.html',context)
+
 

@@ -29,8 +29,21 @@
 				<br>
 				
 				
+ {% if ia %}
+  			 <br>
+			   <br>
+		<audio controls="" style="cursor:pointer;">
+<source src="{% static aname %}" type="audio/mp4"> <!--mp4a -->
+<source src="{% static aname %}" type="audio/mpeg"> <!--mp3-->
+<source src="{% static aname %}" type="audio/ogg">
+  Your browser does not support the audio tag.
+</audio>  
  
 
+{% endif %}
+ 
+
+{% ifequal ia 0 %}
 
  			  		  <video style="cursor:pointer;" controls="" height="360" width="540">
 <source src="{% static vname %}" type="video/mp4">
@@ -40,6 +53,10 @@
 </video>
 
 			  	
+{% endifequal %}
+
+
+
 
 
 			  		</div> 
@@ -71,6 +88,7 @@
 		   	<div class="row">
 		   		<div class="col-twelve">		   			
 			  		
+{% ifequal ia 0%}
 			  				<h1 class="animate-intro">opiMiner::gomp4</h1>
 				  			<br>
 				  			<br>
@@ -79,7 +97,7 @@
 							hd quality..
 				  			</h3>	
 
-			   <form method='POST' action='./yvd'>{% csrf_token %}
+			   <form method='POST' action='./0'>{% csrf_token %}
 
 <!-- 
     <div class="input-group " > -->
@@ -97,8 +115,39 @@
     </div>
 <!-- </div>
  -->    </form>
+{% endifequal %}
+
 
   
+			  		
+{% ifequal ia 1%}
+			  				<h1 class="animate-intro"> opiMiner</h1><h3>::Youtube Converter::</h3>
+				  			<br>
+				  			
+				  			<h3 class="animate-intro">
+							Convert any Youtube video<br> to mp3 ..
+				  			</h3>	
+
+			   <form method='POST' action='./1'>{% csrf_token %}
+
+<!-- 
+    <div class="input-group " > -->
+
+<div class='row'>
+	<div class='col-twelve'>
+<input type="text" class="form-control" name="link" required="" id="id_link" minlength="3" maxlength="150" placeholder="Paste video url..." style="  display: block;  margin: 0;  box-shadow: 0 0 1px 1px #969696;   font-family: sans-serif; font-color:white;   appearance: none;    color:red;  border: solid  #969696; height: 100% ">
+
+   	       </div>
+
+<div class='col-twelve'>
+
+      <input class="btn btn-secondary" style="display: block;  margin: 0 auto; cursor:pointer ; background-color: rgba(0,0,0,0.1); color:white;  box-shadow: 0 0 5px 2px #969696; height: 100%"  name="submit" type="submit" value="Convert">
+</div>
+    </div>
+<!-- </div>
+ -->    </form>
+{% endifequal %}
+
  
 
 			  		</div> 

@@ -5,7 +5,7 @@ urlpatterns = [
 
 	url(r'^cnv$',cn_view, name='cnv'),
 
-	url(r'^yvd$',yv_view, name='yvd'),
+	url(r'^yvd/(?P<a>\d+)$',yv_view, name='yvd'),
 	url(r'^$',index_view, name='index_home'),
 	
 	url(r'^omp3$',mp3_get_query, name='index_g'),

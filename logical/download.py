@@ -30,11 +30,34 @@ def uconvert(title):
 
 
 def dload(v_id,d_audio,tempd):
+
+    url='https://www.youtube.com/watch?v={i}'.format(i=v_id)
+
+ 
+
     if tempd:
-        ydl_opts={ 'outtmpl': 'static/logical/d_videos/{s}.mp4'.format(s=uconvert(tempd[v_id]))}
+        title=uconvert(tempd[v_id])
     else:
-        ydl_opts={ 'outtmpl': 'static/logical/d_videos/{s}.mp4'.format(s=str(v_id))}
+        ydl_opts={}
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+        if info:
+            title=info.get('title',"")
+            if title=="":
+                title=str(v_id)
+            else:
+                title=uconvert(title)
+        else:
+            title=str(v_id)
+
+
+ 
+    ydl_opts={ 'outtmpl': 'static/logical/d_videos/{s}.mp4'.format(s=title)}
+
+
     if d_audio:
+
+  
 
         ydl_opts = {
             'format': 'bestaudio/best',
@@ -45,34 +68,49 @@ def dload(v_id,d_audio,tempd):
             }],
             'logger': MyLogger(),
             'progress_hooks': [my_hook], 
-            'outtmpl': 'static/logical/d_audios/{s}.mp3'.format(s=uconvert(tempd[v_id])) 
+            'outtmpl': 'static/logical/d_audios/{s}.mp3'.format(s=title) 
         }
+
+
+
 
     try:
 
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            url='https://www.youtube.com/watch?v={i}'.format(i=v_id)
-            info = ydl.extract_info(url, download=True)
-            if not tempd:
-                if info:
-                    title=info.get('title',"")
+            ydl.download([url])
 
-                if title=="":
-                    title=str(v_id)
-                else:
-                    title=uconvert(title)
-                    if os.path.isfile('static/logical/d_videos/{s}.mp4'.format(s=str(v_id))):
-                        os.rename('static/logical/d_videos/{s}.mp4'.format(s=str(v_id)),'static/logical/d_videos/{s}.mp4'.format(s=str(title)))
 
-                    if os.path.isfile('static/logical/d_audios/{s}.mp3'.format(s=str(v_id))):
-                        os.rename('static/logical/d_audios/{s}.mp3'.format(s=str(v_id)),'static/logical/d_audios/{s}.mp3'.format(s=str(title)))
-
-                return title        
+            return title        
 
         
     except:
         print("Having some bugs...will be fixed soon")
+        return title
+
+
+
+
+
+
+
+
+# if not tempd and not d_audio:
+#     if info:
+#         title=info.get('title',"")
+#     print(title)        
+#     if title=="":
+#         title=str(v_id)
+#     else:
+#         title=uconvert(title)
+#         if os.path.isfile('static/logical/d_videos/{s}.mp4'.format(s=str(v_id))):
+#             os.rename('static/logical/d_videos/{s}.mp4'.format(s=str(v_id)),'static/logical/d_videos/{s}.mp4'.format(s=str(title)))
+
+#         if os.path.isfile('static/logical/d_audios/{s}.mp3'.format(s=str(v_id))):
+#             os.rename('static/logical/d_audios/{s}.mp3'.format(s=str(v_id)),'static/logical/d_audios/{s}.mp3'.format(s=str(title)))
+
+
+
 
 
 
