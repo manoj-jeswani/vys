@@ -70,32 +70,32 @@
 	   	<h3>opiMiner</h3>  
 
 			<ul class="nav-list">
-				<li class="current"><a  href="/" title="">Home</a></li>
-				<li class="current"><a  href="{% url 'index_g' %}" title="">Download song(mp3/video)</a></li>
-				<li class="current"><a  href="{% url 'yvd' 0 %}" title="">Download Youtube Video</a></li>
+				<li class="current" ><a  href="/" title="" style='color:white'>Home</a></li>
+				<li class="current"><a  href="{% url 'index_g' %}" title=""  style='color:white'>Download song(mp3/video)</a></li>
+				<li class="current"><a  href="{% url 'yvd' 0 %}" title=""  style='color:white'>Download Youtube Video</a></li>
 
-				<li class="current"><a  href="{% url 'cnv' %}" title="">Convert mp4 to mp3</a></li>
+				<li class="current"><a  href="{% url 'cnv' %}" title=""  style='color:white'>Convert mp4 to mp3</a></li>
 				
 
-				<li class="current"><a  href="{% url 'yvd' 1 %}" title="">Convert Youtube video to mp3</a></li>
+				<li class="current"><a  href="{% url 'yvd' 1 %}" title=""  style='color:white'>Convert Youtube video to mp3</a></li>
 
 		<!-- <li><a class="smoothscroll" href="#" title="">About</a></li> -->
 				<!-- <li><a class="smoothscroll" href="#services" title="">Services</a></li> -->
-				<li class="current"><a  href="#contact" title="">Contact</a></li>						
+				<li class="current"><a  href="#contact" title=""  style='color:white'>Contact</a></li>						
 			</ul>	
 
 			<ul class="header-social-list">
 	         <li>
-	         	<a href="https://www.linkedin.com/in/manoj-jeswani-28b6b413a/"><i class="fa fa-linkedin"></i></a>
+	         	<a style='color:white' href="https://www.linkedin.com/in/manoj-jeswani-28b6b413a/"><i class="fa fa-linkedin"></i></a>
 	         </li>
 	         <li>
-	         	<a href="https://www.facebook.com/manoj.jesin"><i class="fa fa-facebook-square"></i></a>
+	         	<a   style='color:white' href="https://www.facebook.com/manoj.jesin"><i class="fa fa-facebook-square"></i></a>
 	         </li>
 	         <li>
-	         	<a href="https://twitter.com/manojjeswanig"><i class="fa fa-twitter"></i></a>
+	         	<a  style='color:white' href="https://twitter.com/manojjeswanig"><i class="fa fa-twitter"></i></a>
 	         </li>
 	         <li>
-	         	<a href="https://www.instagram.com/nocturnal.294/"><i class="fa fa-instagram"></i></a>
+	         	<a  style='color:white' href="https://www.instagram.com/nocturnal.294/"><i class="fa fa-instagram"></i></a>
 	         </li>
           <!--   <li>
             	<a href="#"><i class="fa fa-behance"></i></a>
@@ -111,12 +111,12 @@
 
 
 
-<marquee style='color:yellow'>Please allow cookies in your browser to enjoy the services..</marquee>			
+<marquee style='color:yellow'>Please allow cookies in your browser to enjoy the services.</marquee>			
 {% block content %}
 
 {% endblock %}
 	
-	  <section id="contact" style="background-image: url({% static 'logical/images/bg3.jpg' %});">
+	  <section id="contact" style="background-image: url({% static 'logical/images/bg8.jpg' %});">
 
       <div class="overlay"></div>
 
@@ -124,14 +124,157 @@
    		<div class="col-twelve">
    			
    			<h1>Contact Us</h1>
-				<h3>Your feedback is appreciated..</h3>
+<!-- 				<h3>Your feedback is appreciated..</h3>
+ -->
    			<p class="lead"></p>
+
+
+
+
+<button onclick="fun('hchevron','hdiv')" class='btn btn-success' data-toggle="collapse" data-target="#hdiv"><span style='text-transform: capitalize;'><b>Need some help?</b></span> <i id="hchevron" class="fa fa-chevron-down"></i></button>
+
+
+<div class="collapse" id='hdiv'>
+
+<blockquote class="blockquote">
+
+
+<form id="hForm" method='POST' action="{% url 'uquery' %}">
+	{% csrf_token %}
+
+  <div class="form-group ">
+
+  	<label for="id_name"  class="col-form-label" style='color:yellow;	font-size:13pt'>Name:</label>
+    <!-- 
+    <div class="col-sm-6"> -->
+
+    <input style='color:blue;	font-size:13pt ;background-color:white ' type="text" class="form-control" name="name" required="" id="id_name" maxlength="100" placeholder="Your name here..">
+    <!-- </div> -->
+  </div>
+
+  <div class="form-group ">
+
+  	<label for="id_email" style='color:yellow;	font-size:12pt'  class=" col-form-label">Email:</label><!-- 
+   <div class="col-sm-6"> -->
+   
+    <input type="email" class="form-control" name="email" required="" id="id_email" maxlength="254" style='color:blue;	font-size:13pt; background-color:white '>
+
+<!-- 
+    </div> -->
+  </div>
+  
+
+
+  <div class="form-group">
+
+  <label for="id_issue" class=" col-form-label" style='color:yellow;	font-size:13pt'>Issue:</label>
+<!-- 
+   <div class="col-sm-6"> -->
+    <textarea name="issue" class="form-control" rows="10" style='color:blue;	font-size:13pt; background-color:white ' cols="40" id="id_issue" maxlength="5000" required=""></textarea> 
+    <!-- </div>
+ -->
+
+
+  </div>
+
+  
+  <div class="form-group "><!-- 
+    <div class="col-sm-10"> -->
+      <button type="submit" style='font-size:13pt' class="btn btn-primary btn-lg ">Submit</button>
+   <!--  </div> -->
+  </div>
+
+</form>
+
+
+
+</blockquote>
+
+
+</div>
+
+
+<button onclick="fun('fchevron','fdiv')" class='btn  btn-danger' data-toggle="collapse" data-target="#fdiv"><span style='text-transform: capitalize;'><b>Leave us a feedback</b></span> <i id="fchevron" class="fa fa-chevron-down"></i></button>
+
+
+<div class="collapse" id='fdiv'>
+
+<blockquote class="blockquote">
+
+<form id="fForm" method='POST' action="{% url 'ufeed' %}">
+	{% csrf_token %}
+
+  <div class="form-group">
+  	<label for="id_name"  class="col-form-label" style='color:yellow;	font-size:13pt'>Name:</label>
+    
+      
+    <input style='color:blue;	font-size:13pt ;background-color:white ' type="text" class="form-control" name="name" required="" id="id_name" maxlength="100" placeholder="Your name here..">
+  </div>
+
+  <div class="form-group ">
+  	<label for="id_feed" style='color:yellow;	font-size:12pt'  class="col-form-label">Feedback:</label>
+       <textarea name="feed" class="form-control" rows="10" style='color:blue;	font-size:13pt; background-color:white ' cols="40" id="id_feed" maxlength="5000" required=""></textarea> 
+
+  </div>
+  
+
+
+  <div class="form-group">
+
+  <label for="id_rating" class="col-form-label" style='color:yellow;	font-size:13pt'>Rate us:</label> 
+
+ 
+  <select name="rating"  style='color:blue;	font-size:13pt; height:auto' class="form-control" required="" id="id_rating">
+  <option value="" selected="">Out of 10</option>
+
+  <option value="0">0</option>
+
+  <option value="1">1</option>
+
+  <option value="2">2</option>
+
+  <option value="3">3</option>
+
+  <option value="4">4</option>
+
+  <option value="5">5</option>
+
+  <option value="6">6</option>
+
+  <option value="7">7</option>
+
+  <option value="8">8</option>
+
+  <option value="9">9</option>
+
+  <option value="10">10</option>
+
+</select>
+
+    
+  </div>
+
+  
+  <div class="form-group">
+      <button type="submit" style='font-size:13pt' class="btn btn-primary btn-large">Submit</button>
+  </div>
+
+</form>
+
+
+
+</blockquote>
+
+
+</div>
+
+
    		</div> 
    	</div> <!-- end section-intro -->
 
    	<div class="row contact-content">
 
-   		<div class="col-seven tab-full animate-this">
+   		<div class="col-seven 	">
 
 
 	   			<h6>Email Us At</h6>
@@ -236,6 +379,148 @@
    <script src="{% static  'logical/js/plugins.js' %}"></script>
    <script src="{% static  'logical/js/main.js' %}"></script>
 
+
+<script type="application/javascript" charset="utf-8">
+
+
+$('#fForm').on('submit', function(event){
+    event.preventDefault();
+//    console.log("form submitted!")  // sanity check
+    save_feedback();
+});
+
+
+function save_feedback() {
+    var form_data=$('#fForm').serializeArray();
+    $.ajax({
+        url : "{% url 'ufeed' %}", // the endpoint
+        content_type: 'application/json; charset=utf-8',
+        type : "POST", // http method
+        data : form_data, // data sent with the post request
+
+        // handle a successful response
+        success : function(server_response) {
+        	if (server_response['valid'])
+        	{
+            		console.log("successfully saved"); // another sanity check
+            		$('#fForm').each(function(){
+ 			   			this.reset();
+					});
+					fun('fchevron','fdiv');	
+            		alert(server_response['message']);
+            }
+            else
+            {
+            	console.log("error in validating form"); // another sanity check
+
+				alert(server_response['message']);
+
+            }
+        },
+
+        // handle a non-successful response
+        error : function(server_response) {
+        		console.log('ajax request unsuccessful');
+
+        }
+    });
+};
+
+
+
+
+
+$('#hForm').on('submit', function(event){
+    event.preventDefault();
+//    console.log("form submitted!")  // sanity check
+    save_query();
+});
+
+
+function save_query() {
+    var form_data=$('#hForm').serializeArray();
+    $.ajax({
+        url : "{% url 'uquery' %}", // the endpoint
+        content_type: 'application/json; charset=utf-8',
+        type : "POST", // http method
+        data : form_data, // data sent with the post request
+
+        // handle a successful response
+        success : function(server_response) {
+        	if (server_response['valid'])
+        	{
+            		console.log("successfully saved"); // another sanity check
+            		$('#hForm').each(function(){
+ 			   			this.reset();
+					});
+					fun('hchevron','hdiv');	
+            		alert(server_response['message']);
+            }
+            else
+            {
+            	console.log("error in validating form"); // another sanity check
+
+				alert(server_response['message']);
+
+            }
+        },
+
+        // handle a non-successful response
+        error : function(server_response) {
+        		console.log('ajax request unsuccessful');
+
+        }
+    });
+};
+
+
+
+</script>
+
+
+<script type="text/javascript">
+
+
+
+function fun(chevronid,divid)
+{
+      
+if ( document.getElementById(chevronid).classList.contains('fa-chevron-down') && document.getElementById(divid).classList.contains('collapse')  )
+ {
+     document.getElementById(chevronid).classList.remove('fa-chevron-down');
+
+     document.getElementById(chevronid).classList.add('fa-chevron-up');
+
+     document.getElementById(divid).classList.remove('collapse');
+
+     document.getElementById(divid).classList.add('collapse-show');
+
+
+ } 
+
+else if ( document.getElementById(chevronid).classList.contains('fa-chevron-up') && document.getElementById(divid).classList.contains('collapse-show')   )
+
+{
+       document.getElementById(chevronid).classList.remove('fa-chevron-up');
+
+       document.getElementById(chevronid).classList.add('fa-chevron-down');
+
+     document.getElementById(divid).classList.remove('collapse-show');
+
+     document.getElementById(divid).classList.add('collapse');
+
+
+}
+  
+
+
+
+
+
+}
+
+</script>
+  
 
 {% block include_scripts %}
 

@@ -4,8 +4,6 @@
 {% block content %}
 
 
-
-
    <section id="home">
 
    	<div class="overlay"></div>
@@ -15,8 +13,11 @@
 		   <div class="home-content-tablecell">
 		   	<div class="row">
 		   		<div class="col-twelve">		   			
-
+<!-- 
+<a download="manoj.mp4" href='{% static "logical/d_videos/23.mp4" %}'>Download</a> -->
+			  			
 			  				<h1 class="animate-intro">opiMiner</h1>
+
 				  		<h3 class="animate-intro">	
 				  	
 
@@ -27,7 +28,7 @@
 				  			<hr>
 	
 	<div class="list-group">
-		
+		<b>
   <a href="{% url 'index_g' %}" class="list-group-item list-group-item-success" style="background-color: rgba(0,0,0,0.1); color:white;"> <i class="fa fa-music" aria-hidden="true"></i>    Listen or Download any mp3 or video song </a>
   <hr>
   <a href="{% url 'yvd' 0 %}" class="list-group-item list-group-item-danger" style="background-color: rgba(0,0,0,0.1); color:white;"><i class="fa fa-download" aria-hidden="true"></i>  Download any Youtube video</a>
@@ -36,6 +37,7 @@
   <hr>
   <a href="{% url 'yvd' 1 %}" class="list-group-item list-group-item-info" style="background-color: rgba(0,0,0,0.1); color:white;"><i class="fa fa-exchange" aria-hidden="true"></i>  Convert any Youtube video to mp3 audio</a>
 <hr>
+</b>
 </div>
 
 	  		 	
@@ -75,8 +77,7 @@
 		   		<div class="col-twelve">		   			
 			
 			<h1 class="animate-intro">About Us </h1>
-				  			<br>
-				  			<br>
+				  			
 				  			<h3 class="animate-intro">
 							 <span>opiMiner</span><hr>
 							  Promising quality services in almost no time

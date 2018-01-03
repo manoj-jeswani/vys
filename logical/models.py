@@ -15,3 +15,7 @@ class Uploadmp4(models.Model):
     # uploaded_at = models.DateTimeField(auto_now_add=True)
    
 
+
+
+
+

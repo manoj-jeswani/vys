@@ -19,5 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('logical.urls')),
+    url(r'^visitor/', include('opinions.urls')),
+
 
 ]
