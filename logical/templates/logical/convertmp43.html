@@ -38,28 +38,60 @@
     </div>
  -->
 
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class='row'>
-	<div class='col-lg-4 col-sm-0 col-md-4'>
-    </div>
-	<div class='col-lg-4 col-sm-12 col-md-4'>
+ <div class='row' id="status" hidden>
 
-    <input type="file" name="up" required="" id="id_up" style="  display: block;  margin: 0;cursor:pointer ;  box-shadow: 0 0 5px 5px #969696;   font-family: sans-serif; font-color:white;   appearance: none;    color:yellow;  border: solid  #969696;  ">
+
+<div class='col-lg-12 col-sm-12 col-md-12' style='color:yellow'><p id="text-para"></p></div>
+
+<div class="progress " style="height: 30px; width:100%">
+  <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="height: 100%; width: 0%"></div>
+</div>
 </div>
 
 
-<div class='col-lg-4 col-sm-0 col-md-4'>
-    </div>
+<blockquote hidden id="cnv_status" style="color:yellow;"><b ><p style="font-size:40px"> Converting</p></b>
+  <i class="fa fa-spinner fa-spin" style="font-size:100px"></i> 
+</blockquote>
 
+
+ <div class='row' id="output" hidden>
+
+
+<div class='col-lg-12 col-sm-12 col-md-12'><b style="color:#F0FFF0; font-size:30px; font-family:'Comic Sans' cursive; "> Here's your mp3</b> <i class="fa fa-music fa-stack-2x" style='color:orange; opacity:0.2 ; font-size: 60px' aria-hidden="true"></i> </div>
+
+<div class='col-lg-6 col-sm-6 col-md-6' style="padding-top: 2%; "><a id='play' href='#' style="color:yellow; float:center" class= " btn btn-outline-danger btn-lg"><b> Play Online </b><i class="fa fa-play "  style='color:yellow; opacity:0.5 ; ' 	aria-hidden="true"></i> </a></div>
+
+<div class='col-lg-6 col-sm-6 col-md-6' style="padding-top: 2%"><a id='dload' download href='#'  style="color:yellow; float:center" class= " btn btn-outline-danger btn-lg" ><b> Download </b><i class="fa fa-download "  style='color:yellow; opacity:0.5 ;' aria-hidden="true"></i></a></div>
+
+
+</div>
+
+
+ <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+   
+    <div class='row' id='file-div'>
+<!-- 	<div class='col-lg-4 col-sm-0 col-md-4'>
+    </div> -->
+	<div  class='col-lg-12 col-sm-12 col-md-12'>
+
+    <input type="file" name="up" required="" id="id_up" style="  display: block;  margin: 0;cursor:pointer ;  box-shadow: 0 0 5px 5px #969696; width: 100%; height: 100%;   font-family: sans-serif; font-color:white;   appearance: none;    color:yellow;  border: solid  #969696;  ">
+
+</div>
+
+
+
+<!-- <div class='col-lg-4 col-sm-0 col-md-4'>
+    </div>
+ 
 
 <div class='col-lg-12 col-sm-0 col-md-12' >
     
-    <input class="btn btn-secondary" style="display: block;  margin: 0 auto; cursor:pointer ; background-color: rgba(0,0,0,0.1); color:white;   box-shadow: 0 0 2px 5px #969696;  margin-top: 3%; "  name="submit" type="submit" value="Convert">
+    <input hidden class="btn btn-secondary" style="display: block;  margin: 0 auto; cursor:pointer ; background-color: rgba(0,0,0,0.1); color:white;   box-shadow: 0 0 2px 5px #969696;  margin-top: 3%; "  name="submit" type="submit" value="Convert">
 </div>
-
+-->
 </div>
-
+ 
   </form>
 
 <!-- <input type="button" value="click me" onclick="doing_fun()">
@@ -82,6 +114,77 @@
 {% endblock %}
 
 {% block include_scripts %}
+
+
+
+<script src="{% static 'logical/js/uploadjs/vendor/jquery.ui.widget.js' %}"></script>
+<script src="{% static 'logical/js/uploadjs/jquery.iframe-transport.js' %}"></script>
+<script src="{% static 'logical/js/uploadjs/jquery.fileupload.js' %}"></script>
+
+<script>
+$(function () {
+    $('#id_up').fileupload({
+        
+        dataType: 'json',
+        
+        add: function (e, data) {
+
+
+			console.log('began Uploading');
+            data.submit();
+            $('#status').removeAttr('hidden');
+            $( "#file-div" ).replaceWith($('#status'));
+       
+        },
+
+
+        done: function (e, data) {
+        	file_link=data.result['data']
+        	console.log(file_link);
+		   	$('#dload').attr('href',file_link);
+		   	$('#play').attr('href',file_link);
+	
+		   	$('#output').removeAttr('hidden');
+     
+        	$('#cnv_status').attr('hidden');
+            $( "#cnv_status" ).replaceWith($('#output'));
+
+
+
+         /*   $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo(document.body);
+                console.log(file.name);
+            });
+*/
+        },
+
+         progressall: function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('.progress .progress-bar').css(
+            'width',
+            progress + '%'
+        );
+        $('#text-para').html('Uploading : <b>'+ progress + '%</b>');
+        if(progress==100)
+    	{
+           	$('#cnv_status').removeAttr('hidden');
+     
+        	$('#status').attr('hidden');
+            $( "#status" ).replaceWith($('#cnv_status'));
+        }
+    }
+
+    });
+
+ 
+
+});
+
+
+</script>
+
+
+
 
 <!-- <script type="text/javascript">
 	function doing_fun()

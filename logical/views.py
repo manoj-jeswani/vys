@@ -11,7 +11,7 @@ from .utils import code_generator,create_shortcode
 import os
 from django.conf import settings
 PATH=settings.STATIC_ROOT
-		
+import json		
 
 
 def index_view(request):
@@ -249,8 +249,10 @@ def cn_view(request):
 				"vname":'',
 				"daudio":int(1)
 				}
-
-			return render(request, 'logical/sdownload.html',context)
+			res={}
+			res['data']= " {s} ".format(s=settings.STATIC_URL+aname)
+			return HttpResponse(json.dumps(res))
+			# return render(request, 'logical/sdownload.html',context)
 	
 	else:
 		form = Uploadmp4Form()
