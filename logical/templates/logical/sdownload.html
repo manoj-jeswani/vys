@@ -3,157 +3,6 @@
 
 {% block content %}
 
-
-
-{% if particular %}
-
-  <section id="about" style="background-image: url({% static 'logical/images/bg12.jpg' %});">
-   	<div class="overlay"></div>
-
-   	<div class="home-content-table">
-   	
-		   <div class="home-content-tablecell">
-		   	<div class="row">
-		   		<div class="col-twelve">		   			
-			  		
-			  				<h1 class="animate-intro">Coool !! </h1>
-				  			<br>
-				  			
-				  			<br>
-				<br>
-				  			<h2 class="animate-intro" style="color:white;" >
-				  				<p>
-							 Just one more tap :: <br> Play it or download it..
-</p>
-				  			</h2>	
-				<br>
-				<br>
-				
-				
-{% if daudio %}
-  			 <br>
-			   <br>
-		<audio controls="" style="cursor:pointer;">
-<source src="{% static aname %}" type="audio/mp4"> <!--mp4a -->
-<source src="{% static aname %}" type="audio/mpeg"> <!--mp3-->
-<source src="{% static aname %}" type="audio/ogg">
-  Your browser does not support the audio tag.
-</audio>  
- 
-
-{% endif %}
- 
-
-{% ifequal daudio 0 %}
-
- 			  		  <video style="cursor:pointer;" controls="" height="360" width="540">
-<source src="{% static vname %}" type="video/mp4">
-<source src="{% static vname %}" type="video/webm">
-
-     Your browser does not support the video tag.
-</video>
-
-			  	
-{% endifequal %}
-
-
-			  		</div> 
-             </div>
-       
-       
-
-		   </div> <!-- end home-content-tablecell --> 		   
-		</div> <!-- end home-content-table -->
-
-
-	
-   </section> <!-- end home -->
-
-
-{% endif %}
-
-
-
-
-  {% if res %}
-
-   <!-- about
-   ================================================== -->
-   <section id="about" class="search_results" style="background-image: url({% static 'logical/images/bg3.jpg' %});">
-
-   	<div class="row about-wrap">
-   		<div class="col-full">
-
-   			<div class="about-profile-bg"></div>
-
-				<div class="intro">
-					<h1 style="" class="animate-this">Here's what your search results to..</h1>
-	   			<p class="lead animate-this"><span> </p>	
-				</div>   
-
-<div class="row">
-
-{% for obj in res %}
- 
- <div class="col-sm-6">
-   <div class="card" style="">
-  <div class="card-block">
-    <h4 class="card-title">{{obj.title}}</h4>
-<!--     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
-  </div>
-  <!-- <ul class="list-group list-group-flush">
-    <li class="list-group-item">Duration:</li>
-    <li class="list-group-item">x Views, y likes</li>
-    
-  </ul> -->
-     <!-- <a href="https://www.youtube.com/watch?v={{obj.v_id}}" class="card-link">Watch On Youtube</a> -->
-
-  <div class="card-block">
-   
-    <a href="{% url 'index_s' obj.v_id 1 %}" class="card-link">Download mp3</a>
-    <a href="{% url 'index_s' obj.v_id 0 %}" class="card-link">Download Video</a>
-  </div>
-</div>
-  </div>
-
-{% cycle "" "<div class='col-sm-12'><br/></div></div><div class='row'>" %}
-
-{% endfor %}
-</div>
-
-
-<div class="pagination">
-    <span class="step-links">
-        {% if res.has_previous %}
-            <a style="color:white" href="?page={{ res.previous_page_number }}"><<-<u>Previous</u></a>
-        {% endif %}
-
-        <span style="color:white" class="current">
-            Page {{ res.number }} of {{ res.paginator.num_pages }}.
-        </span>
-
-        {% if res.has_next %}
-            <a style="color:white" href="?page={{ res.next_page_number }}"><u>Next</u>->></a>
-        {% endif %}
-    </span>
-</div> 
-
-   		</div> <!-- end col-full  -->
-   	</div> <!-- end about-wrap  -->
-
-   </section> <!-- end about -->
-
-
-   <!-- about
-   ================================================== -->
-{% else %}
-
-
-
-<!-- 
-        
-          <div class="row"> -->   <!-- home
-   ================================================== -->
    <section id="home">
 
    	<div class="overlay"></div>
@@ -164,7 +13,17 @@
 		   	<div class="row">
 		   		<div class="col-twelve">		   			
 			  		
+			  				
 			  				<h1 class="animate-intro">opiMiner::gomp3</h1>
+
+<div id="prep" class='row' hidden >
+
+<blockquote  class='col-lg-12 col-sm-12 col-md-12' style='color:white'><p style="font-size:30px">Fetching Search Results</p>  <i class="fa fa-search fa-spin" style="font-size:80pt"> </i></blockquote>
+
+</div>
+
+
+				  			<div id='qsub'>
 				  			<br>
 				  			<br>
 				  			<h3 class="animate-intro">
@@ -172,18 +31,19 @@
 							any mp3 or video song..
 				  			</h3>	
 
-			   <br>
-			   <br>
-			   <form method='POST' action='./omp3'>{% csrf_token %}
+			   <form id='search_form' method='POST' action='./omp3'>{% csrf_token %}
 
 
-    <div class="input-group " >
+    <div class="input-group row" >
 
+	<div  class='col-lg-12 col-sm-12 col-md-12'>
 
-   	<input type="text" class="form-control" name="keyword" id="id_keyword" required="" maxlength="150" minlength="3" placeholder="Search song..." style="  display: block;  margin: 0;  box-shadow: 0 0 5px 6px #969696;   font-family: sans-serif; font-color:white;   appearance: none;    color:red;  border: solid  #969696; height: 100% 	">
+   	<input type="text" class="form-control" name="keyword" id="id_keyword" required="" maxlength="150" minlength="3" placeholder="Search song..." style="  display: block;  margin: 0;  box-shadow: 0 0 3px 4px #969696;   font-family: sans-serif; font-color:white;   appearance: none;    color:red;  border: solid  #969696; height: 100%;width: 100% 	">
+</div>
+	<div  class='col-lg-12 col-sm-12 col-md-12'>
 
-        <input class="btn btn-secondary" style="display: block;  margin: 0; cursor:pointer ; background-color: rgba(0,0,0,0.1); color:white;  box-shadow: 0 0 5px 6px #969696; height: 100%"  name="submit" type="submit" value="Go!">
-
+        <input class="btn btn-secondary" style="display: block; margin: 0 auto; cursor:pointer ; background-color: rgba(0,0,0,0.1); color:white;  box-shadow: 0 0 1px 2px #969696; height: 100%"  name="submit" type="submit" value="Go!">
+</div>
     </div>
     </form>
 
@@ -191,6 +51,7 @@
  
 
 			  		</div> 
+			  	</div>
              </div>
        
        
@@ -235,18 +96,151 @@
    </section> <!-- end home -->
 
 
-
-
-
-
-
-
-
-{% endif %}
-
 {% endblock %}
 
 {% block include_scripts %}
+
+<script type="text/javascript">
+
+function load_the_search(tid,kw)
+{
+
+var poll_xhr;
+var willstop = 0;
+(function(){
+var poll = function(){
+
+var task_id=tid;
+var skey=kw;
+
+console.log(task_id)
+poll_xhr = $.ajax({
+	type: "POST",
+	url: "{% url 'load-status' %}",
+  	dataType: 'json', // added data type
+	data: {
+	task_id: task_id,
+	},
+
+	success: function(result) {
+	if (result)
+	{
+		willstop=1;
+
+		$.ajax({
+				
+				type: "POST",
+				url: "{% url 'lsr' %}",
+			  	dataType: 'json', // added data type
+				data: {
+					skey: skey,
+				},
+
+				success: function(flag) 
+				{
+					if(flag)
+					{
+						window.location.replace("{% url 'index_s' %}");
+
+					}
+					else
+					{
+						console.log("Encountered some error");
+					}
+					console.log(flag);
+
+				},
+		});
+	}
+	else
+	{
+		console.log(result);
+			
+	}
+
+}
+});
+};
+ 
+var refreshIntervalId = setInterval(function() {
+poll();
+if(willstop == 1){
+clearInterval(refreshIntervalId);
+}
+},500);
+})();
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$('#search_form').on('submit', function(event){
+    event.preventDefault();
+//    console.log("form submitted!")  // sanity check
+    submit_keyword();
+});
+
+
+function submit_keyword() {
+    var form_data=$('#search_form').serializeArray();
+    $.ajax({
+        url : "./omp3", // the endpoint
+        content_type: 'application/json; charset=utf-8',
+        type : "POST", // http method
+        data : form_data, // data sent with the post request
+
+        // handle a successful response
+        success : function(server_response) {
+        	if (server_response['data'])
+        	{
+            	console.log('query submitted');
+            	
+            	
+            	
+            	$('#search_form').each(function(){
+ 			   			this.reset();
+ 			   	});
+
+            		$('#prep').removeAttr('hidden');
+					$('#qsub').attr('hidden');
+					$( "#qsub" ).replaceWith($('#prep'));
+
+ 			   		
+ 			   		load_the_search(server_response['tid'],server_response['kw']);
+
+         
+            }
+            else
+            {
+            	console.log("error in validating form"); // another sanity check
+
+				alert(server_response['emsg']);
+
+            }
+        },
+
+        // handle a non-successful response
+        error : function(server_response) {
+        		console.log('ajax request unsuccessful');
+
+        }
+    });
+};
+
+</script>
+
 
 
 {% endblock %}

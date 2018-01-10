@@ -49,6 +49,21 @@
 	<link rel="shortcut icon" href="{% static  'logical/images/iconic.png' %}" type="image/x-icon">
 	<link rel="icon" href="{% static  'logical/images/iconic.png' %}" type="image/x-icon">
 
+
+
+<style>
+.pre-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: yellow;
+    text-align: center;
+}
+</style>
+
+
 </head>
 
 <body id="top">
@@ -110,13 +125,12 @@
 	</header> <!-- end header -->  
 
 
-
-<marquee style='color:yellow'>This website uses cookies to ensure you get the best experience on our website.Please allow cookies in your browser to enjoy the services.</marquee>			
+			
 {% block content %}
 
 {% endblock %}
 	
-	  <section id="contact" style="background-image: url({% static 'logical/images/bg8.jpg' %});">
+	  <section id="contact"  style="background-image: url({% static 'logical/images/bg8.jpg' %});">
 
       <div class="overlay"></div>
 
@@ -136,7 +150,7 @@
 
 <div class="collapse" id='hdiv'>
 
-<blockquote class="blockquote">
+<blockquote class="blockquote container">
 
 
 <form id="hForm" method='POST' action="{% url 'uquery' %}">
@@ -199,7 +213,7 @@
 
 <div class="collapse" id='fdiv'>
 
-<blockquote class="blockquote">
+<blockquote class="blockquote container">
 
 <form id="fForm" method='POST' action="{% url 'ufeed' %}">
 	{% csrf_token %}
@@ -349,6 +363,10 @@
 
    	<div class="footer-bottom">
 
+
+      
+
+
       	<div class="row">
 
       		<div class="col-twelve">
@@ -366,7 +384,11 @@
 		   <a class="smoothscroll" title="Back to Top" href="#top">
 		   	<i class="fa fa-long-arrow-up" aria-hidden="true"></i>
 		   </a>
-		</div>		
+		</div>
+<div class="pre-footer">
+  <p >We use cookies to ensure that we give you the best experience on our website. Please allow cookies in your browser to enjoy the services.</p>		
+</div>
+
    </footer>
 
    <div id="preloader"> 

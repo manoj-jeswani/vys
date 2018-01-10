@@ -4,77 +4,6 @@
 {% block content %}
 
 
-{% if particular %}
-
-  <section id="about" style="background-image: url({% static 'logical/images/bg12.jpg' %});">
-   	<div class="overlay"></div>
-
-   	<div class="home-content-table">
-   	
-		   <div class="home-content-tablecell">
-		   	<div class="row">
-		   		<div class="col-twelve">		   			
-			  		
-			  				<h1 class="animate-intro">Coool !! </h1>
-				  			<br>
-				  			
-				  			<br>
-				<br>
-				  			<h2 class="animate-intro" style="color:white;" >
-				  				<p>
-							 Just one more tap :: <br> Play it or download it..
-</p>
-				  			</h2>	
-				<br>
-				<br>
-				
-				
- {% if ia %}
-  			 <br>
-			   <br>
-		<audio controls="" style="cursor:pointer;">
-<source src="{% static aname %}" type="audio/mp4"> <!--mp4a -->
-<source src="{% static aname %}" type="audio/mpeg"> <!--mp3-->
-<source src="{% static aname %}" type="audio/ogg">
-  Your browser does not support the audio tag.
-</audio>  
- 
-
-{% endif %}
- 
-
-{% ifequal ia 0 %}
-
- 			  		  <video style="cursor:pointer;" controls="" height="360" width="540">
-<source src="{% static vname %}" type="video/mp4">
-<source src="{% static vname %}" type="video/webm">
-
-     Your browser does not support the video tag.
-</video>
-
-			  	
-{% endifequal %}
-
-
-
-
-
-			  		</div> 
-             </div>
-       
-       
-
-		   </div> <!-- end home-content-tablecell --> 		   
-		</div> <!-- end home-content-table -->
-
-
-	
-   </section> <!-- end home -->
-
-
-{% endif %}
-
-
 
 
 
@@ -90,7 +19,7 @@
 			  		
 {% ifequal ia 0%}
 			  				<h1 class="animate-intro">opiMiner::gomp4</h1>
-				  			<br>
+				  		
 				  			<br>
 				  			<h3 class="animate-intro">
 							Download any Youtube video<br> in

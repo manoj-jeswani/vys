@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 import youtube_dl
 import os
+from .models import TemporaryDetails
+
 
 class MyLogger(object):
     def debug(self, msg):
@@ -30,8 +32,8 @@ def uconvert(title):
 
 
 def dload(v_id,d_audio,tempd):
-
     url='https://www.youtube.com/watch?v={i}'.format(i=v_id)
+
 
  
 
@@ -50,8 +52,12 @@ def dload(v_id,d_audio,tempd):
         else:
             title=str(v_id)
 
+    obj=TemporaryDetails()
+    obj.title=title
+    obj.v_id=str(v_id)
+    obj.d_audio=int(d_audio)
+    obj.save()
 
- 
     ydl_opts={ 'outtmpl': 'static/logical/d_videos/{s}.mp4'.format(s=title)}
 
 
@@ -79,19 +85,23 @@ def dload(v_id,d_audio,tempd):
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
-
-
-            return title        
-
-        
+    
     except:
         print("Having some bugs...will be fixed soon")
-        return title
+
+    return title
 
 
 
 
 
+'''
+if u make changes in the area that comes under the section 
+of celery then u have to restart celery for those changes to get reflected
+
+
+like in download.py if u make some change then restart celery for those changes to come into action
+'''
 
 
 

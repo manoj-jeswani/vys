@@ -71,6 +71,8 @@
 import requests
 import json 
 from urllib.error import HTTPError
+from logical.models import Search_Result
+from collections import OrderedDict
 
 d_key = "AIzaSyBT_zMEst2Sz8bSFLU63OudONQUb77SnF0"
 
@@ -92,10 +94,7 @@ def get_y_content(content):
 def api_call(keyword, max_r):
   url = "https://www.googleapis.com/youtube/v3/search?q={k_w}&part=snippet&key={d_k}&type=video&videoCategoryId=10&maxResults={m_r}".format(k_w=keyword,d_k=d_key,m_r=max_r)
   content = json.loads(requests.get(url).text)
-
   return content
-
-
 
 
 def search_keyword(keyword):
@@ -104,8 +103,13 @@ def search_keyword(keyword):
 
   try:
     content=api_call(keyword, 50)
-    ls=get_y_content(content)
-    return ls
+    res_list=get_y_content(content)
+
+    obj=Search_Result()
+    obj.kw=str(keyword)
+    obj.sres=res_list
+    obj.save()
+    return res_list
 
   except HTTPError as e:
     print ("An HTTP error %d occurred:\n %s" % (e.resp.status, e.content))

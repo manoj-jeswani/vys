@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+
+
+  <section id="about" style="background-image: url({% static 'logical/images/bg12.jpg' %});">
+   	<div class="overlay"></div>
+
+   	<div class="home-content-table">
+   	
+		   <div class="home-content-tablecell">
+		  		
+ 
+
+ <div class='row' id="btns" hidden>
+
+
+<div class='col-lg-12 col-sm-12 col-md-12' style="color:#F0FFF0;" ><i class="fa fa-music" style="font-size:50px; "></i>   <b style="font-size:30px; ">ere's  y<i class="fa fa-play-circle" style="font-size:50px;"></i>ur  f<i class="fa fa-download" style="font-size:50px; "></i>le</b>  <br> </div>
+
+<div class='col-lg- 6 col-sm-6 col-md-6' style="padding-top: 2%; "><a id='play'  href='#' target='_blank' style="color:yellow;  float:center" class= " btn btn-outline-danger btn-lg"><b > Play </b><i class="fa fa-play-circle "  style='color:yellow; opacity:0.5 ; ' 	aria-hidden="true"></i> </a></div>
+
+<div class='col-lg-6 col-sm-6 col-md-6' style="padding-top: 2%"><a id='dload' download href='#'  style="color:yellow; float:center" class= " btn btn-outline-danger btn-lg" ><b > Download </b><i class="fa fa-download "  style='color:yellow; opacity:0.5 ;' aria-hidden="true"></i></a></div>
+
+
+</div>
+
+
+ <div id="prep" class='row' >
+
+
+<div  class='col-lg-12 col-sm-12 col-md-12' style='color:white'><p style="font-size:30px">Preparing your file <i class="fa fa-download" style="font-size:30px; opacity:1"></i> </p><i class="fa fa-spinner fa-spin" style="font-size:80pt"></i></div>
+
+</div>
+
+<blockquote class="container" style='color:white;'><p style="font-size:20px">It’s a good moment to leave us a <a style="color:yellow;" onclick="feed_fun('fchevron','fdiv')" href='#fdiv'> feedback</a>.<br>Your <a style="color:yellow;"  onclick="feed_fun('fchevron','fdiv')" href='#fdiv'>feedback</a> is highly appreciated.
+ <i class="fa fa-comments-o" style="font-size:30px"></i></p>
+	</blockquote>   
+       
+
+		   </div> <!-- end home-content-tablecell --> 		   
+		</div> <!-- end home-content-table -->
+
+
+	
+   </section> <!-- end home -->
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block include_scripts %}
+
+
+<script type="application/javascript" charset="utf-8">
+
+var poll_xhr;
+var willstop = 0;
+(function(){
+var poll = function(){
+
+var task_id="{{task_id}}";
+
+poll_xhr = $.ajax({
+	type: "POST",
+	url: "{% url 'load-status' %}",
+  	dataType: 'json', // added data type
+	data: {
+	task_id: task_id,
+	},
+
+	success: function(result) {
+	if (result)
+	{
+		willstop=1;
+		var da ="{{d_audio}}";
+
+		$.ajax({
+				
+				type: "POST",
+				url: "{% url 'get-link' %}",
+			  	dataType: 'json', // added data type
+				data: {
+					v_id: "{{v_id}}",
+					d_audio:da,
+					iyview:"{{iyview}}"
+				},
+
+				success: function(link_data) 
+				{
+					if (parseInt(da)==1)
+						lk=link_data['aname'];
+					else if(parseInt(da)==0) 
+						lk=link_data['vname'];
+					$('#dload').attr('href',lk);
+					$('#play').attr('href',lk);
+					$('#btns').removeAttr('hidden');
+					$('#prep').attr('hidden');
+					$( "#prep" ).replaceWith($('#btns'));
+
+
+				
+					console.log(link_data);
+
+						
+				},
+		});
+	}
+	else
+	{
+		console.log(result);
+			
+	}
+
+}
+});
+};
+ 
+var refreshIntervalId = setInterval(function() {
+poll();
+if(willstop == 1){
+clearInterval(refreshIntervalId);
+}
+},500);
+})();
+
+
+
+function feed_fun(chevronid,divid)
+{
+      
+if ( document.getElementById(chevronid).classList.contains('fa-chevron-down') && document.getElementById(divid).classList.contains('collapse')  )
+ {
+     document.getElementById(chevronid).classList.remove('fa-chevron-down');
+
+     document.getElementById(chevronid).classList.add('fa-chevron-up');
+
+     document.getElementById(divid).classList.remove('collapse');
+
+     document.getElementById(divid).classList.add('collapse-show');
+
+
+ }
+
+}
+</script>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+   <section id="about" class="search_results" style="background-image: url({% static 'logical/images/bg3.jpg' %});">
+
+   	<div class="row about-wrap">
+
+
+{% if res %}
+   		<div class="col-full" id="slist" >
+
+   			<div class="about-profile-bg"></div>
+
+				<div class="intro">
+					<h1 style="" class="animate-this">Here's what your search results to..</h1>
+	   			<p class="lead animate-this"><span> </p>	
+				</div>   
+
+<div class="row">
+
+{% for obj in res %}
+ 
+ <div class="col-sm-6" style='margin-top: 5%;'>
+   <div class="card" style="">
+  <div class="card-block">
+    <h4 class="card-title">{{obj.title}}</h4>
+<!--     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+  </div>
+  <!-- <ul class="list-group list-group-flush">
+    <li class="list-group-item">Duration:</li>
+    <li class="list-group-item">x Views, y likes</li>
+    
+  </ul> -->
+     <!-- <a href="https://www.youtube.com/watch?v={{obj.v_id}}" class="card-link">Watch On Youtube</a> -->
+
+  <div class="card-block">
+   
+    <a href="{% url 'load' obj.v_id 1 %}" class="card-link">Download mp3</a>
+    <a href="{% url 'load' obj.v_id 0 %}" class="card-link">Download Video</a>
+  </div>
+</div>
+  </div>
+
+{% cycle "" "<div class='col-sm-12'><br/></div></div><div class='row'>" %}
+
+{% endfor %}
+</div>
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if res.has_previous %}
+            <a style="color:white" href="?page={{ res.previous_page_number }}"><<-<u>Previous</u></a>
+        {% endif %}
+
+        <span style="color:white" class="current">
+            Page {{ res.number }} of {{ res.paginator.num_pages }}.
+        </span>
+
+        {% if res.has_next %}
+            <a style="color:white" href="?page={{ res.next_page_number }}"><u>Next</u>->></a>
+        {% endif %}
+    </span>
+</div> 
+
+   		</div> <!-- end col-full  -->
+
+
+{% endif %}
+
+
+
+
+
+
+   	</div> <!-- end about-wrap  -->
+
+   </section> <!-- end about -->
+
+
+
+{% endblock %}
+
+{% block include_scripts %}
+
+{% endblock %}

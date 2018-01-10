@@ -11,13 +11,17 @@ from .utils import code_generator,create_shortcode
 import os
 from django.conf import settings
 PATH=settings.STATIC_ROOT
-import json		
+import json
+from logical.tasks import load_item,load_search
+from celery import uuid
+from celery.result import AsyncResult
+from .models import TemporaryDetails,Search_Result
+from collections import OrderedDict
 
-
+from django.views.decorators.csrf import csrf_exempt
 def index_view(request):
 	context={}
 	return render(request, 'logical/index.html',context)
-
 
 
 
@@ -26,41 +30,96 @@ def index_view(request):
 def mp3_get_query(request):
 	kw=""
 	error_msg=""
-	res_list=[]
-	res=[]
-	if request.method=='POST':
-		
+	task_id=""
+	if request.is_ajax() and request.method=='POST':
+
+		resp={}
 		f=search_submit_form(request.POST)
 		if f.is_valid():
 			kw=f.cleaned_data.get('keyword')
 		if kw=="":
 			error_msg=f.errors.get('keyword')
 			f.errors['keyword']=""
+			resp['data']=False
 		else:
-			res_list=search_keyword(str(kw))
-			tempd={}
-			tempd['all']="_"
-			for i in res_list:
-				tempd[i['v_id']]=i['title']
-
-			request.session['results']=res_list
-			request.session['tempd']=tempd
-			
-			return HttpResponseRedirect('omp3/search-results/all/8')
-
-			# for i in res_list:
-			# 	print(i)
+		
+			task_id = uuid()
+			ret=load_search.apply_async((str(kw),),task_id=task_id)
+			resp['data']=True
+		resp['kw']=kw
+		resp['tid']=task_id
+		resp['emsg']=error_msg
+		return HttpResponse(json.dumps(resp), content_type ='application/json; charset=utf8')
 
 	else:
 		f=search_submit_form()
 	context={
 		"form":f,
 		"error_msg":error_msg,
-		"kw":kw,
-		"res":res,
 		}
 
 	return render(request, 'logical/sdownload.html',context)
+
+
+@csrf_exempt
+def log_search_result_view(request):
+	skey=""
+	if request.is_ajax() and 'skey' in request.POST.keys():
+		skey=request.POST['skey']
+		obj=Search_Result.objects.filter(kw=str(skey)).first()
+		res_list=obj.sres
+		request.session['results']=res_list
+		tempd={}
+		tempd['all']="_"
+		for i in res_list:
+			tempd[i['v_id']]=i['title']
+
+		request.session['tempd']=tempd
+		
+
+		#obj.delete()
+		data=True
+
+	else:
+		# 'This is not an ajax request or invalid data'
+		data=False
+	
+	return HttpResponse(json.dumps(data), content_type ='application/json; charset=utf8')
+
+
+
+
+
+def mp3_show_results(request):
+
+	res_list=[]
+	res=[]
+	
+	if 'results' in request.session.keys():
+		res_list=request.session['results']
+	
+	paginator = Paginator(res_list, 8) 
+
+	page =request.GET.get('page')
+
+	try:
+		res = paginator.page(page)
+
+	except EmptyPage:
+		# If page is out of range (e.g. 9999), deliver last page of results.
+		res = paginator.page(paginator.num_pages)
+	except:
+		# If page is not an integer, deliver first page.
+		res = paginator.page(1)
+
+
+	context={
+		"res":res,
+	}
+
+	return render(request, 'logical/show_res.html',context)
+
+
 
 
 def uconvert(title):
@@ -73,70 +132,93 @@ def uconvert(title):
 	return res
 
 
-	
-def mp3_show_results(request,v_id=None,d_audio=None):
-	f=search_submit_form()
-	aname=""
-	vname=""
-	kw=""
-	error_msg=""
-	res_list=[]
-	res=[]
-	particular=0
-	if 'results' in request.session.keys():
-		res_list=request.session['results']
+@csrf_exempt
+def get_file_link(request):
+	if request.is_ajax() and'v_id' and 'd_audio' and 'iyview' in request.POST.keys():
+		v_id=request.POST['v_id']
+		d_audio=request.POST['d_audio']
+		iyview=request.POST['iyview']
+		
+		if str(v_id) is not 'all' and int(d_audio)  in (0,1) and int(iyview)  in (0,1) :
+			mm=""
+			if int(iyview):
+				obj=TemporaryDetails.objects.filter(v_id=str(v_id),d_audio=int(d_audio)).first()
+				mm=obj.title
+				obj.delete()
+			else:
 
-	
-	paginator = Paginator(res_list, 8) # Show 16 contacts per page
-
-	page =request.GET.get('page')
-	
-	try:
-		res = paginator.page(page)
-	except PageNotAnInteger:
-		# If page is not an integer, deliver first page.
-		res = paginator.page(1)
-	except EmptyPage:
-		# If page is out of range (e.g. 9999), deliver last page of results.
-		res = paginator.page(paginator.num_pages)
-	
-	if str(v_id) is not 'all' and int(d_audio) is not 8 :
-
-		if 'tempd' in request.session.keys():
-			tempd=request.session['tempd']
+				if 'tempd' in request.session.keys():
+					tempd=request.session['tempd']
+					mm=uconvert(tempd[v_id])
 			
-			dload(str(v_id),int(d_audio),tempd)
-			particular=1
+			print('got ' ,v_id)
+			print(d_audio)
 
-			mm=uconvert(tempd[v_id])
-			
+			vname=""
+			aname=""
 			if int(d_audio):
-			
-				cmd="cd {path}/logical/d_audios; ls {file}.*".format(path=PATH,file=mm)	
+
+				cmd="cd {path}/logical/d_audios; ls {file}.*".format(path=PATH,file=mm)
 				mm=os.popen(cmd).read()[:-1]
 				aname='logical/d_audios/{s}'.format(s=mm)
 			else:
 				cmd="cd {path}/logical/d_videos; ls {file}.*".format(path=PATH,file=mm)
 				mm=os.popen(cmd).read()[:-1]
 				vname='logical/d_videos/{s}'.format(s=mm)
+			data={'aname':settings.STATIC_URL+aname,'vname':settings.STATIC_URL+vname}
+
+		else:
+			data = 'Post entries not correct'
+	else:
+		data = 'This is not an ajax request'
+	return HttpResponse(json.dumps(data), content_type ='application/json; charset=utf8')
+
+
+
+
+
+
+@csrf_exempt
+def load_state(request):
+
+	if request.is_ajax():
+		if 'task_id' in request.POST.keys() and request.POST['task_id']:
+			task_id = request.POST['task_id']
+			data = AsyncResult(task_id).successful()
 			
+			# data = AsyncResult(task_id).successful()
+
+
+			#data = task.result or task.state
+
+
+		else:
+			data = 'No task_id in the request'
+	else:
+		data = 'This is not an ajax request'
+	return HttpResponse(json.dumps(data), content_type ='application/json; charset=utf8')
 
 
 
 
 
-	context={
-	"form":f,
-	"error_msg":error_msg,
-	"kw":kw,
-	"res":res,
-	"particular":particular,
-	"aname":aname,
-	"vname":vname,
-	"daudio":int(d_audio)
-	}
 
-	return render(request, 'logical/sdownload.html',context)
+def load_view(request,v_id=None,d_audio=None):
+	if str(v_id) is not 'all' and int(d_audio) is not 8 :
+
+		if 'tempd' in request.session.keys():
+			tempd=request.session['tempd']
+			ret=False
+			task_id = uuid()
+			ret=load_item.apply_async((str(v_id),int(d_audio),tempd),task_id=task_id)
+			print(task_id)
+			#ret=load_item.delay(str(v_id),int(d_audio),tempd)
+
+	context={'task_id':str(task_id),'v_id':v_id,'d_audio':d_audio,'iyview':0}
+	return render(request, 'logical/loading.html',context)
+
+
+
 
 
 
@@ -152,12 +234,23 @@ def get_id(url):
 
 
 
+
+
+				# if int(a):
+				# 	cmd="cd {path}logical/d_audios; ls {file}.*".format(path=PATH,file=mm)
+				# 	mm=os.popen(cmd).read()[:-1]
+				# 	aname='logical/d_audios/{s}'.format(s=mm)
+				# else:
+				# 	cmd="cd {path}logical/d_videos; ls {file}.*".format(path=PATH,file=mm)
+				# 	mm=os.popen(cmd).read()[:-1]
+				# 	vname='logical/d_videos/{s}'.format(s=mm)
+
+
+
+
+
 def yv_view(request,a=None):
-	lnk=""
-	particular=0
 	error_msg=""
-	vname=""
-	aname=""
 	if request.method=='POST':
 
 		f=utube_submit(request.POST)
@@ -169,31 +262,24 @@ def yv_view(request,a=None):
 		else:
 			vid=get_id(lnk)
 			if vid is not None:
-				mm=""
+				
 				mapy={}
 
-				mm=dload(str(vid),int(a),mapy)
-				particular=1
-				if int(a):
-					cmd="cd {path}logical/d_audios; ls {file}.*".format(path=PATH,file=mm)	
-					mm=os.popen(cmd).read()[:-1]
-					aname='logical/d_audios/{s}'.format(s=mm)
-				else:
-					cmd="cd {path}logical/d_videos; ls {file}.*".format(path=PATH,file=mm)
-					mm=os.popen(cmd).read()[:-1]
-					vname='logical/d_videos/{s}'.format(s=mm)
-				
-
+				ret=False
+				task_id = uuid()
+				ret=load_item.apply_async((str(vid),int(a),mapy),task_id=task_id)
+				print(task_id)
+				context={'task_id':str(task_id),'v_id':str(vid),'d_audio':int(a),'iyview':1}
+				return render(request, 'logical/loading.html',context)
 
 
 	else:
 		f=utube_submit()
+	
 	context={
 		"form":f,
 		"error_msg":error_msg,
-		"particular":particular,
-		"vname":vname,
-		"aname":aname,
+
 		"ia":int(a)
 		}
 
@@ -201,8 +287,62 @@ def yv_view(request,a=None):
 	return render(request, 'logical/yvdownload.html',context)
 
 
-def repspace(fname):
+
+
 	
+
+# def yv_view(request,a=None):
+# 	lnk=""
+# 	particular=0
+# 	error_msg=""
+# 	vname=""
+# 	aname=""
+# 	if request.method=='POST':
+
+# 		f=utube_submit(request.POST)
+# 		if f.is_valid():
+# 			lnk=f.cleaned_data.get('link')
+# 		if lnk=="":
+# 			error_msg=f.errors.get('link')
+# 			f.errors['link']=""
+# 		else:
+# 			vid=get_id(lnk)
+# 			if vid is not None:
+# 				mm=""
+# 				mapy={}
+
+# 				mm=dload(str(vid),int(a),mapy)
+# 				particular=1
+# 				if int(a):
+# 					cmd="cd {path}logical/d_audios; ls {file}.*".format(path=PATH,file=mm)
+# 					mm=os.popen(cmd).read()[:-1]
+# 					aname='logical/d_audios/{s}'.format(s=mm)
+# 				else:
+# 					cmd="cd {path}logical/d_videos; ls {file}.*".format(path=PATH,file=mm)
+# 					mm=os.popen(cmd).read()[:-1]
+# 					vname='logical/d_videos/{s}'.format(s=mm)
+
+
+
+
+# 	else:
+# 		f=utube_submit()
+# 	context={
+# 		"form":f,
+# 		"error_msg":error_msg,
+# 		"particular":particular,
+# 		"vname":vname,
+# 		"aname":aname,
+# 		"ia":int(a)
+# 		}
+
+
+# 	return render(request, 'logical/yvdownload.html',context)
+
+
+
+def repspace(fname):
+
 	fname=fname.replace(" ","_")
 	return str(fname)
 
@@ -216,12 +356,12 @@ def cn_view(request):
 
 	if request.method == 'POST':
 		got_up=''
-		
+
 		if 'up' in request.FILES:
 			got_up=request.FILES['up'].name
-		
-		ext=get_extension(str(got_up)) 
-		code=create_shortcode()            
+
+		ext=get_extension(str(got_up))
+		code=create_shortcode()
 
 		request.FILES['up'].name=str(code+ext)
 
@@ -253,12 +393,10 @@ def cn_view(request):
 			res['data']= " {s} ".format(s=settings.STATIC_URL+aname)
 			return HttpResponse(json.dumps(res))
 			# return render(request, 'logical/sdownload.html',context)
-	
+
 	else:
 		form = Uploadmp4Form()
 
 
 	context={'form': form}
 	return render(request, 'logical/convertmp43.html',context)
-
-
