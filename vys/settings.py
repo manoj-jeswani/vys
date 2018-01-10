@@ -137,3 +137,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT =os.path.join(BASE_DIR, 'media/')
 SHORTCODE_MAX=15
 SHORTCODE_MIN=6
+
+
+
+'''
+Allocated swap to droplet via following:
+
+
+https://stackoverflow.com/questions/20111242/how-to-avoid-errno-12-cannot-allocate-memory-errors-caused-by-using-subprocess
+'''
