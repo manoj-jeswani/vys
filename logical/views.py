@@ -297,7 +297,6 @@ def on_play(request,v_id=None):
 	is_audio=1
 	fpath=""
 	name=""
-	print(request.session["cnv"])
 	if v_id in request.session or v_id=="cnv":
 		if v_id=="cnv":
 			data=request.session["cnv"]
