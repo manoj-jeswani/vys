@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+   <section id="home">
+
+   	<div  class="overlay"></div>
+
+   	<div  class="home-content-table" style="
+	      background: linear-gradient(to right, #20002c, #cbb4d4);">
+   			
+		   <div class="home-content-tablecell">
+		   	<div   class="row">
+		   		<div class="col-twelve">		   			
+		   		<h3 class="animate-intro">
+		   			{{name}}
+		   		</h3>	
+		   		{% if is_audio %}
+				   	<audio controls>
+			  			<source src="{{fpath}}" type="audio/mp3">
+					  <source src="{{fpath}}" type="audio/ogg">
+					</audio>
+		   		{% else%}
+
+				<video poster="" controls>
+				  <source src="{{fpath}}" type="video/mp4">
+				  <source src="{{fpath}}" type="video/webm">
+				  <!-- Captions are optional -->
+				  <track kind="captions" label="English captions" src="" srclang="en" default>
+				</video>
+		   		{% endif %}		
+
+
+
+			  		</div> 
+             </div>
+       
+       
+
+				  			<div class="more animate-intro">
+				  			
+
+				  			<!-- 	<a class="smoothscroll button stroke" href="#">
+				  					
+				  				</a> -->
+				  			</div>							
+ 
+		   </div> <!-- end home-content-tablecell --> 		   
+		</div> <!-- end home-content-table -->
+
+
+   </section> <!-- end home -->
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block include_scripts %}
+
+
+{% endblock %}

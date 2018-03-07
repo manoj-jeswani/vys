@@ -44,7 +44,7 @@ def mp3_get_query(request):
 		else:
 		
 			task_id = uuid()
-			ret=load_search.apply_async((str(kw),),task_id=task_id)
+			ret=load_search.apply_async((str(kw),),task_id=task_id,queue='vys')
 			resp['data']=True
 		resp['kw']=kw
 		resp['tid']=task_id
@@ -161,10 +161,14 @@ def get_file_link(request):
 				cmd="cd {path}/logical/d_audios; ls {file}.*".format(path=PATH,file=mm)
 				mm=os.popen(cmd).read()[:-1]
 				aname='logical/d_audios/{s}'.format(s=mm)
+				request.session[v_id]={'d_audio':d_audio,'fpath':settings.STATIC_URL+aname}
+	
 			else:
 				cmd="cd {path}/logical/d_videos; ls {file}.*".format(path=PATH,file=mm)
 				mm=os.popen(cmd).read()[:-1]
 				vname='logical/d_videos/{s}'.format(s=mm)
+				request.session[v_id]={'d_audio':d_audio,'fpath':settings.STATIC_URL+vname}
+
 			data={'aname':settings.STATIC_URL+aname,'vname':settings.STATIC_URL+vname}
 
 		else:
@@ -210,7 +214,7 @@ def load_view(request,v_id=None,d_audio=None):
 			tempd=request.session['tempd']
 			ret=False
 			task_id = uuid()
-			ret=load_item.apply_async((str(v_id),int(d_audio),tempd),task_id=task_id)
+			ret=load_item.apply_async((str(v_id),int(d_audio),tempd),task_id=task_id,queue='vys')
 			print(task_id)
 			#ret=load_item.delay(str(v_id),int(d_audio),tempd)
 
@@ -251,6 +255,7 @@ def get_id(url):
 
 def yv_view(request,a=None):
 	error_msg=""
+	lnk=""
 	if request.method=='POST':
 
 		f=utube_submit(request.POST)
@@ -267,7 +272,7 @@ def yv_view(request,a=None):
 
 				ret=False
 				task_id = uuid()
-				ret=load_item.apply_async((str(vid),int(a),mapy),task_id=task_id)
+				ret=load_item.apply_async((str(vid),int(a),mapy),task_id=task_id,queue='vys')
 				print(task_id)
 				context={'task_id':str(task_id),'v_id':str(vid),'d_audio':int(a),'iyview':1}
 				return render(request, 'logical/loading.html',context)
@@ -288,6 +293,27 @@ def yv_view(request,a=None):
 
 
 
+def on_play(request,v_id=None):
+	is_audio=1
+	fpath=""
+	name=""
+	print(request.session["cnv"])
+	if v_id in request.session or v_id=="cnv":
+		if v_id=="cnv":
+			data=request.session["cnv"]
+		else:
+			data=request.session[v_id]
+		is_audio=int(data['d_audio'])
+		fpath=data['fpath']
+		name=os.path.basename(fpath)
+		#del request.session[v_id]
+	context={
+		"is_audio":is_audio,
+		"fpath":fpath,
+		'name':name
+		}
+
+	return render(request, 'logical/online_play.html',context)
 
 	
 
@@ -391,6 +417,7 @@ def cn_view(request):
 				}
 			res={}
 			res['data']= " {s} ".format(s=settings.STATIC_URL+aname)
+			request.session["cnv"]={'d_audio':1,'fpath':res['data']}
 			return HttpResponse(json.dumps(res))
 			# return render(request, 'logical/sdownload.html',context)
 

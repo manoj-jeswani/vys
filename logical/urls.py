@@ -13,6 +13,7 @@ urlpatterns = [
 
 	url(r'^load-status$',load_state, name='load-status'),
 	url(r'^get-link$',get_file_link, name='get-link'),
+	url(r'^on-play/(?P<v_id>[-\w]+)$',on_play, name='on-play'),
 
 	url(r'^log-search-result$',log_search_result_view, name='lsr'),
 
