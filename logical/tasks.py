@@ -15,10 +15,10 @@ def load_item(v_id,d_audio,tempd):
 	return True
 
 
-# @task
-# def wait_for_thread():
+@task
+def wait_for_thread():
 	
-# 	return True
+	return True
 
 
 

@@ -12,7 +12,7 @@ import os
 from django.conf import settings
 PATH=settings.STATIC_ROOT
 import json
-from logical.tasks import load_item,load_search
+from logical.tasks import load_item,load_search,wait_for_thread
 from celery import uuid
 from celery.result import AsyncResult
 from .models import TemporaryDetails,Search_Result
@@ -24,8 +24,8 @@ def index_view(request):
 	context={}
 	return render(request, 'logical/index.html',context)
 
-t=threading.Thread()
-ty=threading.Thread()
+# t=threading.Thread()
+# ty=threading.Thread()
 
 
 # Create your views here.
@@ -189,25 +189,25 @@ def get_file_link(request):
 
 @csrf_exempt
 def load_state(request):
-	global t,ty
+	
 	if request.is_ajax():
-		if t in threading.enumerate():
-			t.join()
-			data=True
-		elif ty in threading.enumerate():
-			ty.join()
-			data=True
-		else:
+		# if t in threading.enumerate():
+		# 	t.join()
+		# 	data=True
+		# elif ty in threading.enumerate():
+		# 	ty.join()
+		# 	data=True
+		# else:
 
-			if 'task_id' in request.POST.keys() and request.POST['task_id']:
-				task_id = request.POST['task_id']
+		if 'task_id' in request.POST.keys() and request.POST['task_id']:
+			task_id = request.POST['task_id']
 
-				data = AsyncResult(task_id).successful()
-				print(data)
-				# data = AsyncResult(task_id).successful()
+			data = AsyncResult(task_id).successful()
+			print(data)
+			# data = AsyncResult(task_id).successful()
 
 
-				#data = task.result or task.state
+			#data = task.result or task.state
 
 
 	else:
@@ -229,11 +229,11 @@ def load_view(request,v_id=None,d_audio=None):
 				ret=load_item.apply_async((str(v_id),int(d_audio),tempd),task_id=task_id,queue='vys')
 				print(task_id)
 			else:
-				global t
+
 				t=threading.Thread(target=dload,args=(str(v_id),int(d_audio),tempd))
 				t.start()
-				#t.join()
-				#wait_for_thread.apply_async((),task_id=task_id,queue='vys')
+				t.join()
+				wait_for_thread.apply_async((),task_id=task_id,queue='vys')
 				#ret=load_item.delay(str(v_id),int(d_audio),tempd)
 
 	context={'task_id':str(task_id),'v_id':v_id,'d_audio':d_audio,'iyview':0}
@@ -295,11 +295,11 @@ def yv_view(request,a=None):
 					ret=load_item.apply_async((str(vid),int(a),mapy),task_id=task_id,queue='vys')
 					print(task_id)
 				else:
-					global ty
+			
 					ty=threading.Thread(target=dload,args=(str(vid),int(a),mapy))
 					ty.start()
-					#t.join()
-					#wait_for_thread.apply_async((),task_id=task_id,queue='vys')
+					ty.join()
+					wait_for_thread.apply_async((),task_id=task_id,queue='vys')
 
 				context={'task_id':str(task_id),'v_id':str(vid),'d_audio':int(a),'iyview':1}
 				return render(request, 'logical/loading.html',context)
