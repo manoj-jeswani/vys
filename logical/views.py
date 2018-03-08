@@ -157,17 +157,17 @@ def get_file_link(request):
 			vname=""
 			aname=""
 
-			cmd="cd {path}/logical/d_videos; ls {file}.*".format(path=PATH,file=mm)
-			mmres=os.popen(cmd).read()[:-1]
-			vname='logical/d_videos/{s}'.format(s=mmres)
 
 			if int(d_audio):
-				aname='logical/d_audios/{s}.mp3'.format(s=mm)
-				clip = mp.VideoFileClip(settings.STATIC_ROOT+vname)
-				clip.audio.write_audiofile(settings.STATIC_ROOT+aname)
+				cmd="cd {path}/logical/d_audios; ls {file}.*".format(path=PATH,file=mm)
+				mm=os.popen(cmd).read()[:-1]
 
+				aname='logical/d_audios/{s}'.format(s=mm)
 				request.session[v_id]={'d_audio':d_audio,'fpath':settings.STATIC_URL+aname}
 			else:
+				cmd="cd {path}/logical/d_videos; ls {file}.*".format(path=PATH,file=mm)
+				mm=os.popen(cmd).read()[:-1]
+				vname='logical/d_videos/{s}'.format(s=mm)
 
 				request.session[v_id]={'d_audio':d_audio,'fpath':settings.STATIC_URL+vname}
 
@@ -216,7 +216,7 @@ def load_view(request,v_id=None,d_audio=None):
 			tempd=request.session['tempd']
 			ret=False
 			task_id = uuid()
-			ret=load_item.apply_async((str(v_id),0,tempd),task_id=task_id,queue='vys')
+			ret=load_item.apply_async((str(v_id),int(d_audio),tempd),task_id=task_id,queue='vys')
 			print(task_id)
 			#ret=load_item.delay(str(v_id),int(d_audio),tempd)
 
@@ -274,7 +274,7 @@ def yv_view(request,a=None):
 
 				ret=False
 				task_id = uuid()
-				ret=load_item.apply_async((str(vid),0,mapy),task_id=task_id,queue='vys')
+				ret=load_item.apply_async((str(vid),int(a),mapy),task_id=task_id,queue='vys')
 				print(task_id)
 				context={'task_id':str(task_id),'v_id':str(vid),'d_audio':int(a),'iyview':1}
 				return render(request, 'logical/loading.html',context)
