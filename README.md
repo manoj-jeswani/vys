@@ -23,5 +23,3 @@ time consuming processes in the background, meanwhile the user is entertained wi
 <h4>Tech Stack :</h4>
 <b>Python<br>Django<br>Postgresql<br>Vanilla JavaScript<br>Nginx<br>Celery<br>Redis <br> </b>
 <hr>
- 
-<h4> Live Demo : http://opiminer.co </h4>
